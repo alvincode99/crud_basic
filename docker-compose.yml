@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: tienda-postgres
+    environment:
+      POSTGRES_DB: tienda_db
+      POSTGRES_USER: tienda_user
+      POSTGRES_PASSWORD: tienda_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U tienda_user -d tienda_db" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tienda-app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_URL: jdbc:postgresql://postgres:5432/tienda_db
+      DB_USERNAME: tienda_user
+      DB_PASSWORD: tienda_pass
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:
