@@ -34,6 +34,10 @@ docker-compose up --build
 - OpenAPI JSON: `http://localhost:8080/v3/api-docs`
 - Base endpoint: `http://localhost:8080/api/v1/productos`
 
+3. Ejemplo visual de Swagger UI:
+
+![Ejemplo de Swagger UI](docs/images/swagger-ui-ejemplo.png)
+
 ## D) Como correr tests
 
 ```bash
